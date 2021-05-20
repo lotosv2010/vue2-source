@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app" style="color:red;">
+    <ul>
+      <li>{{ children.name }}</li>
+      <li>{{ children.age }}</li>
+    </ul>
+    <div>{{ msg }}</div>
+  </div>
+  <script src="./dist/umd/vue.js"></script>
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        message: 'this is a message',
+        children: {
+          name: 'robin',
+          age: 18
+        },
+        lists: [1, 2, 3, 4]
+      },
+      computed: {
+        // computed 内部使用了 defineProperty，内部有一个变量 dirty，控制缓存
+        // computed 还是一个 watcher，内部依赖的属性会收集这个 watcher
+        msg() {
+          console.log('run')
+          return this.message + '!'
+        }
+      }
+    })
+    setTimeout(() => {
+      // vm.children.age = 30
+      vm.message = 'hello world'
+      console.log(vm.msg)
+    }, 3000)
+    console.log(vm.msg)
+    console.log(vm.msg)
+  </script>
+</body>
+</html>

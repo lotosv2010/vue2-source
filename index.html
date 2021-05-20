@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app" style="color:red;">
+    <ul>
+      <li>{{ children.name }}</li>
+      <li>{{ children.age }}</li>
+    </ul>
+    <my-button></my-button>
+    <aa></aa>
+    <bb></bb>
+  </div>
+  <script src="./dist/umd/vue.js"></script>
+  <script>
+    Vue.component('my-button', {
+      data() {
+        return {
+          title: 'this is button'
+        }
+      },
+      template: `<button> click me {{ title }}</button>`
+    })
+    // 组件的合并策略
+    const vm = new Vue({
+      el: '#app',
+      components: {
+        aa: {
+          template: `<div>hello</div>`
+        },
+        bb: {
+          template: `<div>world</div>`
+        }
+      },
+      data: {
+        children: {
+          name: 'robin',
+          age: 18
+        }
+      }
+    })
+
+    console.log(vm)
+  </script>
+</body>
+</html>

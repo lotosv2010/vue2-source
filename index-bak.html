@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app" style="color:red;">
+    hello
+    <ul>
+      <li>{{ children.name }}</li>
+      <li>{{ children.age }}</li>
+    </ul>
+    <div>{{lists}}</div>
+  </div>
+  <script src="./dist/umd/vue.js"></script>
+  <script>
+    // options Api 通过一个选项进行配置
+    Vue.mixin({
+      created() {
+        console.log('created mixin1')
+      }
+    })
+    Vue.mixin({
+      created() {
+        console.log('created mixin2')
+      }
+    })
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        message: 'this is a message',
+        children: {
+          name: 'robin',
+          age: 18
+        },
+        lists: [1, 2, 3, 4],
+        arr: [{ name: 111}, {name: 222}],
+        a: {
+          a: {
+            a: 1
+          }
+        }
+      },
+      created() {
+        console.log('created')
+      },
+      updated() {
+        console.log('updated')
+      },
+      watch: {
+        // 1.直接 key，value
+        // 2.写成key 和 数组的方式
+        // 3.监控当前实例上的方法
+        // 4.handler的写法
+        'a.a.a': {
+          handler(val, old) {
+            console.log(val, old)
+          },
+          // immediate: true,
+          // sync: true
+        }
+        // a() {
+        //   console.log('a')
+        // }
+      }
+    })
+    console.log(vm)
+
+    // setTimeout(() => {
+    //   vm.children.name = 'test'
+    //   // vm.lists.push(123)
+    //   // vm._update(vm._render())
+    //   // 数据变化自动调用 vm._update(vm._render()) 就可以了
+    //   // vue更新策略是以组件为单位的，给每个组件都增加一个watcher，属性变化后就调用这个watcher（渲染watcher）
+    //   // 封装watcher
+    // }, 2000)
+
+    // 渲染操作
+    // 1.默认会找render方法
+    // 2.默认没有传入render方法会找template
+    // 3.前面两项都没有，找当前el指定的元素中的内容来进行渲染
+
+    // 数组更新
+    // 1.取数组的值时会调用get方法，我们希望让当前数组记住这个渲染watcher
+    // 2.给所有的对象类型都增加一个dep属性
+    // 3.当页面对arr取值时就让数组的dep记住这个watcher
+    // 4.当更新数组时或调用push、shift等方法时，找到数组对应的watcher来更新
+
+    // 批处理
+    // vue异步更新，更新数据后不能立刻拿到最新的节点
+    // nextTick 等待页面更新好后再获取最终DOM
+    // setTimeout(() => {
+    //   vm.lists.push(123)
+    //   vm.lists.push(234)
+    //   vm.lists.push(345)
+    //   vm.children.age = 30
+    //   vm.children.name = 'vue'
+    //   vm.$nextTick(()=>{
+    //     console.log('nextTick')
+    //   })
+    // }, 1000)
+
+    // watch
+    // 会触发set方法
+    // set方法会调用watcher.run
+    vm.a.a.a = 100
+  </script>
+</body>
+</html>
